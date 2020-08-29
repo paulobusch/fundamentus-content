@@ -1,0 +1,11 @@
+{
+  "name": "fundamentus-content",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "author": "paulo",
+  "license": "ISC",
+  "repository": {
+    "url": ""
+  }
+}
