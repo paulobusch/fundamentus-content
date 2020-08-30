@@ -4,7 +4,7 @@
     },
     "Excel": {
         "Worksheet": "Mercado",
-        "Path": "data/Ações para consulta.xlsx",
+        "Path": "C:/Users/Paulo/Desktop/Análise de ações.xlsx",
         "Columns": {
             "code": "Ação"
         }

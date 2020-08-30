@@ -18,12 +18,11 @@ class App {
         const api = new Fundamentus(this.config.Fundamentus.Url);
         let counter = 1;
         for (let row of rows) {
-            const code = row[columnCode];
+            const code = row[columnCode].toUpperCase();
             console.log(`Consultando: ${code} | ${counter} / ${rows.length}`);
             const data = await api.readData(code, columns);
             data[columnCode] = code;
-            for (let column of columns)
-                row[column] = data[column] || ' - ';
+            Object.assign(row, data);
             counter++;
         }
         await excel.save(columns, rows);

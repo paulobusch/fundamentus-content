@@ -1,6 +1,5 @@
 const request = require('request-promise').defaults({ encoding: 'latin1' });
 const cheerio = require('cheerio');
-const fs = require('fs');
 
 class Fundamentus {
     constructor(url) {
@@ -13,7 +12,6 @@ class Fundamentus {
             headers: { 'User-Agent': 'Chrome/84.0.4147.135' } 
         });
         if (!html) return data;
-        fs.writeFileSync('teste.html', html);
         const $ = cheerio.load(html);
         for (let prop of props) {
             const td = $(`span.txt:contains(${prop})`).parent().next();
