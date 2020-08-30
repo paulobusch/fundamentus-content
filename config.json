@@ -3,7 +3,7 @@
         "Url": "https://www.fundamentus.com.br/detalhes.php?papel=${code}"
     },
     "Excel": {
-        "Path": "data",
+        "Path": "data/Ações para consulta.xlsx",
         "Columns": {
             "code": "Ação"
         }

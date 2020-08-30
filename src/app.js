@@ -4,7 +4,6 @@ const { Fundamentus } = require('./fundamentus');
 class App {
     constructor(config) {
         this.config = config;
-        console.log(this.config);
     }
 
     run() {
@@ -12,12 +11,8 @@ class App {
         const data = excel.read(this.config.Excel.Columns);
         if (data == null) throw new Error("Planilha inválida");
         const api = new Fundamentus(this.config.Fundamentus.Url);
-        for (let row of data.rows) {
-            
-        }
-        for (let column of excel.columns()){
-            
-        }
+        data.rows = api.queryList(data.rows, excel.headers());
+        excel.save(result);
     }
 }
 

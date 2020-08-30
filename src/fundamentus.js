@@ -3,8 +3,15 @@ class Fundamentus {
         this.url = url;
     }
 
-    data(code) {
+    queryList(codes, props) {
+        const list = [];
+        for (let code of codes)
+            list.push(this.queryOne(code, props));
+        return list;
+    }
 
+    queryOne(code, props) {
+        return {  };
     }
 }
 
