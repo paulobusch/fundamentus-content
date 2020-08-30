@@ -8,8 +8,11 @@ class ExcelWrapper {
 
     async headers() {
         const columns = [];
-        for (let c = 1; c <= this.worksheet.columns.length; c++)
-            columns.push(this.getCellValue(1, c));
+        for (let c = 1; c <= this.worksheet.columns.length; c++) {
+            const name = this.getCellValue(1, c);
+            if (!name || !/\[.*?\]/.test(name)) continue;
+            columns.push(name);
+        }
         return columns;
     }
 

@@ -14,8 +14,10 @@ class Fundamentus {
         if (!html) return data;
         const $ = cheerio.load(html);
         for (let prop of props) {
-            const td = $(`span.txt:contains(${prop})`).parent().next();
-            data[prop] = this.tryCast(td.find('font,a').text());
+            const td = $(`span.txt:contains(${prop.replace(/[\[\]]/g, '')})`).parent().next();
+            let field = td.find('font,a');
+            if (field.length === 0) field = td.find('span.txt');
+            data[prop] = this.tryCast(field.text());
         }
         return data;
     }
