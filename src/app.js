@@ -20,10 +20,12 @@ class App {
         for (let row of rows) {
             const code = row[columnCode];
             console.log(`Consultando: ${code} | ${counter} / ${rows.length}`);
-            const result = await api.query(code, columns);
+            const data = await api.readData(code, columns);
+            data[columnCode] = code;
             for (let column of columns)
-                row[column] = result[column] || ' - ';
+                row[column] = data[column] || ' - ';
             counter++;
+            console.log(row);
         }
         await excel.save(rows);
         console.log('Fim');

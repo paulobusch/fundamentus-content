@@ -1,19 +1,24 @@
-const request = require('sync-request');
+const request = require('request-promise').defaults({ encoding: 'latin1' });
+const cheerio = require('cheerio');
+const fs = require('fs');
 
 class Fundamentus {
     constructor(url) {
         this.url = url;
     }
 
-    async query(code, props) {
+    async readData(code, props) {
         const data = new Object();
-        const result = await request('GET', `${this.url}?papel=${code}`, {
-            headers: { 'User-Agent': 'Chrome/84.0.4147.135' }
+        const html = await request(`${this.url}?papel=${code}`, { 
+            headers: { 'User-Agent': 'Chrome/84.0.4147.135' } 
         });
-        console.log(result.statusCode);
-        if (result.statusCode !== 200) return data;
-        const html = result.getBody('utf8');
-        console.log(html);
+        if (!html) return data;
+        fs.writeFileSync('teste.html', html);
+        const $ = cheerio.load(html);
+        for (let prop of props) {
+            const td = $(`span.txt:contains(${prop})`).parent().next();
+            data[prop] = td.find('font,a').text();
+        }
         return data;
     }
 }
