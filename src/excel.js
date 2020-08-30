@@ -1,20 +1,13 @@
 const Excel = require('exceljs');
 
 class ExcelWrapper {
-    constructor(path) {
+    constructor(path, worksheetName) {
         this.path = path;
-    }
-
-    async checkLoaded() {
-        if (this.worksheet) return;
-        const workbook = new Excel.Workbook();
-        await workbook.xlsx.readFile(this.path);
-        this.worksheet = workbook.worksheets[0];
+        this.worksheetName = worksheetName;
     }
 
     async headers() {
         const columns = [];
-        await this.checkLoaded();
         for (let c = 1; c <= this.worksheet.columns.length; c++)
             columns.push(this.getCellValue(1, c));
         return columns;
@@ -22,8 +15,11 @@ class ExcelWrapper {
 
     async read() {
         const rows = [];
+        this.workbook = new Excel.Workbook();
+        await this.workbook.xlsx.readFile(this.path);
+        this.worksheet = this.workbook.worksheets.find(w => w.name === this.worksheetName);
+        if (!this.worksheet) throw new Error(`Nenhuma planilha com o nome: ${this.worksheetName}`);
         const columns = await this.headers();
-        await this.checkLoaded();
         const recursive = (rowNumber) => {
             let row = new Object();
             if (!this.getCellValue(rowNumber, 1)) return;
@@ -38,8 +34,23 @@ class ExcelWrapper {
         return { columns, rows };
     }
 
-    async save(data) {
-
+    async save(columns, rows) {
+        let rowNumber = 2;
+        for (let row of rows) {
+            let columnNumber = 1;
+            for (let column of columns) {
+                const cellValue = row[column];
+                const cell = this.worksheet.getCell(rowNumber, columnNumber);
+                cell.value = cellValue;
+                columnNumber++;
+            }
+            rowNumber++;
+        }
+        try {
+            await this.workbook.xlsx.writeFile(this.path);
+        } catch {
+            throw new Error('Falha ao gravar a planilha');
+        }
     }
 
     getCellValue(row, column) {

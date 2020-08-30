@@ -9,7 +9,7 @@ class App {
     async run() {
         console.log('Iniciando leitura');
         const columnCode = this.config.Excel.Columns.code;
-        const excel = new ExcelWrapper(this.config.Excel.Path);
+        const excel = new ExcelWrapper(this.config.Excel.Path, this.config.Excel.Worksheet);
         const { rows, columns } = await excel.read();
         if (columns.indexOf(columnCode) === -1) 
             throw new Error("A Planilha deve ter a coluna: " + columnCode);
@@ -25,9 +25,8 @@ class App {
             for (let column of columns)
                 row[column] = data[column] || ' - ';
             counter++;
-            console.log(row);
         }
-        await excel.save(rows);
+        await excel.save(columns, rows);
         console.log('Fim');
     }
 }

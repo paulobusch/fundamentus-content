@@ -3,6 +3,7 @@
         "Url": "https://www.fundamentus.com.br/detalhes.php"
     },
     "Excel": {
+        "Worksheet": "Mercado",
         "Path": "data/Ações para consulta.xlsx",
         "Columns": {
             "code": "Ação"
