@@ -1,4 +1,4 @@
-const { Excel } = require('./excel');
+const { ExcelWrapper } = require('./excel');
 const { Fundamentus } = require('./fundamentus');
 
 class App {
@@ -8,18 +8,21 @@ class App {
 
     async run() {
         console.log('Iniciando leitura');
-        const excel = new Excel(this.config.Excel.Path);
-        const data = await excel.read(this.config.Excel.Columns);
-        if (data == null) throw new Error("Planilha inválida");
+        const columnCode = this.config.Excel.Columns.code;
+        const excel = new ExcelWrapper(this.config.Excel.Path);
+        const { rows, columns } = await excel.read();
+        if (columns.indexOf(columnCode) === -1) 
+            throw new Error("A Planilha deve ter a coluna: " + columnCode);
+        if (rows.length === 0)
+            throw new Error("A Planilha deve ter alguma ação para consulta");
         const api = new Fundamentus(this.config.Fundamentus.Url);
-        const headers = excel.headers();
         let counter = 1;
-        for (let row of data.rows) {
-            const { code } = row;
-            console.log(`Consultando: ${code} | ${counter} / ${row.length}`);
-            const result = await api.query(code, headers);
-            for (let header of headers)
-                row[header] = result[header] || ' - ';
+        for (let row of rows) {
+            const code = row[columnCode];
+            console.log(`Consultando: ${code} | ${counter} / ${rows.length}`);
+            const result = await api.query(code, columns);
+            for (let column of columns)
+                row[column] = result[column] || ' - ';
             counter++;
         }
         await excel.save(result);
