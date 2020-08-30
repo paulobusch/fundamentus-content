@@ -6,13 +6,24 @@ class App {
         this.config = config;
     }
 
-    run() {
+    async run() {
+        console.log('Iniciando leitura');
         const excel = new Excel(this.config.Excel.Path);
-        const data = excel.read(this.config.Excel.Columns);
+        const data = await excel.read(this.config.Excel.Columns);
         if (data == null) throw new Error("Planilha inválida");
         const api = new Fundamentus(this.config.Fundamentus.Url);
-        data.rows = api.queryList(data.rows, excel.headers());
-        excel.save(result);
+        const headers = excel.headers();
+        let counter = 1;
+        for (let row of data.rows) {
+            const { code } = row;
+            console.log(`Consultando: ${code} | ${counter} / ${row.length}`);
+            const result = await api.query(code, headers);
+            for (let header of headers)
+                row[header] = result[header] || ' - ';
+            counter++;
+        }
+        await excel.save(result);
+        console.log('Fim');
     }
 }
 

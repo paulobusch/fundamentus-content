@@ -1,6 +1,6 @@
 {
     "Fundamentus": {
-        "Url": "https://www.fundamentus.com.br/detalhes.php?papel=${code}"
+        "Url": "https://www.fundamentus.com.br/detalhes.php"
     },
     "Excel": {
         "Path": "data/Ações para consulta.xlsx",
