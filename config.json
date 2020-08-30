@@ -1,5 +1,11 @@
 {
     "Fundamentus": {
-        "Url": "https://www.fundamentus.com.br/detalhes.php?papel=${papel}"
+        "Url": "https://www.fundamentus.com.br/detalhes.php?papel=${code}"
+    },
+    "Excel": {
+        "Path": "data",
+        "Columns": {
+            "code": "Ação"
+        }
     }
 }
