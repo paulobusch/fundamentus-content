@@ -10,6 +10,6 @@
   },
   "dependencies": {
     "exceljs": "^4.1.1",
-    "request": "^2.88.2"
+    "sync-request": "^6.1.0"
   }
 }

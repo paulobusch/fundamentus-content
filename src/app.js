@@ -25,7 +25,7 @@ class App {
                 row[column] = result[column] || ' - ';
             counter++;
         }
-        await excel.save(result);
+        await excel.save(rows);
         console.log('Fim');
     }
 }
